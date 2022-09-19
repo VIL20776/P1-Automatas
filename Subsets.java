@@ -38,22 +38,21 @@ public class Subsets {
 
     static Autom subsets (Autom autom)
     {
-        Autom result = new Autom();
+        DFA result = new DFA();
 
         Set<Character> symbols = autom.getSymbols();
         List<Trans> transitions = autom.getTransitions();
+        int aceptance = autom.getAceptance();
 
         Set<Integer> initSet = new HashSet<>( sLock(autom.getTransitions(), 0) );
 
         Map<Set<Integer>, Integer> subsets = new HashMap<>();
-        subsets.put(new HashSet<>(), -1);
         subsets.put(initSet, 0);
 
         Deque<Set<Integer>> stateSets = new ArrayDeque<>();
         stateSets.push(initSet);
 
         int count = 0;
-
         while (!stateSets.isEmpty()) {
             Set<Integer> originSet = stateSets.pop();
             for (Character c : symbols) {
@@ -63,18 +62,29 @@ public class Subsets {
                     destSet.addAll(sLock(autom.getTransitions(), s));
                 }
 
-                if (subsets.containsKey(destSet)) {
+                if (destSet == new HashMap<>())
+                {
+                    subsets.putIfAbsent(destSet, -1);
+                }
+
+                if (!subsets.containsKey(destSet)) {
                     count++;
                     subsets.put(destSet, count);
+                    stateSets.push(destSet);
+                    if (destSet.contains(aceptance)) {
+                        result.addAceptance(count);
+                    }
                 }
 
                 result.addTransition(new Trans(subsets.get(originSet), subsets.get(destSet), c));
-                stateSets.push(destSet);
             }
-        
-        }
 
-        symbols.forEach(c -> result.addTransition(new Trans(-1, -1, c)));
+            if (subsets.containsValue(-1)) {
+                symbols.forEach(c -> result.addTransition(new Trans(-1, -1, c)));
+            }
+
+            result.setStateSize(count + 1);
+        }
 
         return result;
     }

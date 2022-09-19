@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Autom {
-    private List<Integer> states;
-    private List<Trans> transitions;
-    private Set<Character> symbols;
+    protected List<Integer> states;
+    protected List<Trans> transitions;
+    protected Set<Character> symbols;
     private int aceptance;
 
     public Autom(){
@@ -22,6 +22,7 @@ public class Autom {
             this.aceptance = 0;
             this.setStateSize(size);
         }
+        
         public Autom(char c){
             this.states = new ArrayList<Integer> ();
             this.transitions = new ArrayList <Trans> ();
@@ -42,6 +43,10 @@ public class Autom {
             return symbols;
         }
 
+        public void setStates(List<Integer> states) {
+            this.states = states;
+        }
+
         public void setAceptance(int aceptance) {
             this.aceptance = aceptance;
         }
@@ -49,6 +54,10 @@ public class Autom {
         public void setStateSize(int size){
             for (int i = 0; i < size; i++)
                 this.states.add(i);
+        }
+
+        public List<Integer> getStates() {
+            return states;
         }
 
         public List<Trans> getTransitions() {
