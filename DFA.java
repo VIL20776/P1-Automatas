@@ -3,8 +3,11 @@ import java.util.List;
 import java.util.Set;
 
 public class DFA extends Autom {
-    private Set<Integer> finals = new HashSet<>();
+    private Set<Integer> finals = new HashSet<>(); //Conjunto de estados de aceptacion
 
+    /*
+     * Constructor que llama al constructor base dAutom
+     */
     DFA () {
         super();
     }

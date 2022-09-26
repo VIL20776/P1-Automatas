@@ -3,72 +3,108 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/*
+ * Clase base de un automata no determinista
+ */
 public class Autom {
     protected List<Integer> states;
     protected List<Trans> transitions;
     protected Set<Character> symbols;
     private int aceptance;
 
+    //Constructores
+
+    /*
+     * Constructor base
+     */
     public Autom(){
-            this.states = new ArrayList <Integer> ();
-            this.transitions = new ArrayList <Trans> ();
-            this.symbols = new HashSet<>();
-            this.aceptance = 0;
-        }
-        public Autom(int size){
-            this.states = new ArrayList <Integer> ();
-            this.transitions = new ArrayList <Trans> ();
-            this.symbols = new HashSet<>();
-            this.aceptance = 0;
-            this.setStateSize(size);
-        }
-        
-        public Autom(char c){
-            this.states = new ArrayList<Integer> ();
-            this.transitions = new ArrayList <Trans> ();
-            this.symbols = new HashSet<>();
-            this.setStateSize(2);
-            this.aceptance = 1;
-            this.transitions.add(new Trans(0, 1, c));
-            this.symbols.add(c);
-        }
+        this.states = new ArrayList <Integer> ();
+        this.transitions = new ArrayList <Trans> ();
+        this.symbols = new HashSet<>();
+        this.aceptance = 0;
+    }
+    /*
+     * Constructor que genera una cantidad inicial de estados.
+     * @param size -Cantidad de estados a generar.
+     */
+    public Autom(int size){
+        this.states = new ArrayList <Integer> ();
+        this.transitions = new ArrayList <Trans> ();
+        this.symbols = new HashSet<>();
+        this.aceptance = 0;
+        this.setStateSize(size);
+    }
+    
+    /*
+     * Constructor que genera un automata con una trancision inicial.
+     * @param c -Simbolo de la trancision.
+     */
+    public Autom(char c){
+        this.states = new ArrayList<Integer> ();
+        this.transitions = new ArrayList <Trans> ();
+        this.symbols = new HashSet<>();
+        this.setStateSize(2);
+        this.aceptance = 1;
+        this.transitions.add(new Trans(0, 1, c));
+        this.symbols.add(c);
+    }
 
-        public void addTransition (Trans t)
-        {
-            this.transitions.add(t);
-            this.symbols.add(t.symbol);
-        }
+    /*
+     * Agrega una trancision al automata.
+     * @param t -Trancision a agregar
+     */
+    public void addTransition (Trans t)
+    {
+        this.transitions.add(t);
+        this.symbols.add(t.symbol);
+    }
 
-        public Set<Character> getSymbols() {
-            return symbols;
-        }
+    /*
+     * Getter que devuelve un conjunto de simbolos
+     * @return symbols -Conjunto de simbolos
+     */
+    public Set<Character> getSymbols() {
+        return symbols;
+    }
 
-        public void setStates(List<Integer> states) {
-            this.states = states;
-        }
+    /*
+     * Setter que cambia los estados previos, por los estados dados
+     * @param states -Nueva lista de estados
+     */
+    public void setStates(List<Integer> states) {
+        this.states = states;
+    }
 
-        public void setAceptance(int aceptance) {
-            this.aceptance = aceptance;
-        }
+    /*
+     * Setter que cambia el estado de aceptacion original por el estado dado
+     * @param aceptance -Nuevo estado de aceptacion
+     */
+    public void setAceptance(int aceptance) {
+        this.aceptance = aceptance;
+    }
 
-        public void setStateSize(int size){
-            for (int i = 0; i < size; i++)
-                this.states.add(i);
-        }
+    /*
+     * Setter que genera nuevos estados segun el parametro dado
+     * @param size -Cantidad de estados nuevos
+     */
+    public void setStateSize(int size){
+        for (int i = 0; i < size; i++)
+            this.states.add(i);
+    }
 
-        public List<Integer> getStates() {
-            return states;
-        }
+    public List<Integer> getStates() {
+        return states;
+    }
 
-        public List<Trans> getTransitions() {
-            return transitions;
-        }
+    public List<Trans> getTransitions() {
+        return transitions;
+    }
 
-        public int getAceptance() {
-            return aceptance;
-        }
+    public int getAceptance() {
+        return aceptance;
+    }
 
-        public int size(){
-            return states.size();
-        }
+    public int size(){
+        return states.size();
+    }
 }

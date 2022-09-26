@@ -8,6 +8,9 @@ import java.util.Set;
 
 public class Minimize {
 
+    /*
+     * Genera la matriz de estados
+     */
     private static boolean[][] initializeMatrix (int states, Set<Integer> finals)
     {
         boolean matrix [][] = new boolean [states][states];
@@ -25,6 +28,9 @@ public class Minimize {
         return matrix;
     }
 
+    /*
+     * Generar pila inicial de pares de estados
+     */
     private static Deque<Integer []> statePairs (boolean matrix [][])
     {
         Deque<Integer []> pairs = new ArrayDeque<>();
@@ -41,6 +47,9 @@ public class Minimize {
         return pairs;
     }
 
+    /*
+     * Determina que estados pueden ser reemplazados y genera un mapa de reemplazo
+     */
     private static Map<Integer, Integer> mapStates (boolean matrix [][])
     {
         Map<Integer, Integer> newStates = new HashMap<>();
@@ -58,8 +67,12 @@ public class Minimize {
         return newStates;
     }
     
+    /*
+     * Minimizacion de un automata finito determinista
+     */
     static DFA minimize(DFA autom)
     {   
+        //Inicializacion de varibles
         int size = autom.size();
         List<Integer> states = autom.getStates();
         List<Trans> trans = autom.getTransitions();
@@ -70,16 +83,17 @@ public class Minimize {
         Deque<Integer []> initialPairs = statePairs(matrix);
         Deque<Integer []> newPairs = new ArrayDeque<>();
 
-        do {
+        do { // Busca pares de estados de destino
             Integer [] refPair = initialPairs.pop();
             for (char c : symbols) {
                 for (Trans t0 : trans) {
                     if (refPair[0] == t0.destiny && c == t0.symbol) {
                         for (Trans t1 : trans) {
                             if (refPair[1] == t1.destiny && c == t1.symbol) {
+                                //Agrega el par de estados de origen correspondiente si no ha sido agregado
                                 Integer [] newPair = {t0.origin, t1.origin};
                                 if (!newPairs.contains(newPair)){
-                                    matrix[t0.origin][t1.origin] = true;
+                                    matrix[t0.origin][t1.origin] = true; //Actualiza la matriz
                                     newPairs.push(newPair);
                                 }
                             }
@@ -94,8 +108,10 @@ public class Minimize {
 
         } while (!initialPairs.isEmpty());
 
+        //Mapea los estados a reemplazar
         Map<Integer,Integer> newStates = mapStates(matrix);
 
+        //Genera el nuevo automata finito determinista
         states.forEach(s -> s = newStates.getOrDefault(s, s));
 
         Set<Integer> resizeStates = new HashSet<>(states);
