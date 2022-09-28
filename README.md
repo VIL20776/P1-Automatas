@@ -1,0 +1,3 @@
+# P1-Automatas
+
+GRUPO 5, TEORÍA DE LA COMPUTACIÓN
