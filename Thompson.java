@@ -80,28 +80,34 @@ public class Thompson {
         for (char c : expresion.toCharArray()) {
             switch (c) {
                 case '.':
+                {
                     Autom b = nodes.pop();
                     Autom a = nodes.pop();
 
                     nodes.push(concat(a, b));
                     break;
+                }
 
                 case '|':
                 case '+':
-                    Autom y = nodes.pop();
-                    Autom x = nodes.pop();
+                {
+                    Autom b = nodes.pop();
+                    Autom a = nodes.pop();
 
-                    nodes.push(union(x, y));
+                    nodes.push(union(a, b));
                     break;
+                }
 
                 case '*':
-                    Autom z = nodes.pop();
+                {
+                    Autom a = nodes.pop();
 
-                    nodes.push(kleene(z));
+                    nodes.push(kleene(a));
                     break;
+                }
             
                 default:
-                    // Add hollow state to the stack
+                    // Agrega un nodo al stack
                     Autom s = new Autom(c);
                     nodes.push(s);
                     break;

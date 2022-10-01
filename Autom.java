@@ -107,4 +107,27 @@ public class Autom {
     public int size(){
         return states.size();
     }
+
+    @Override
+    public String toString() {
+        String info = "";
+
+        String states = "ESTADOS: { ";
+        String symbols = "SIMBOLOS: { ";
+        String transitions = "TRANSICIONES: { ";
+        String aceptance = "ACEPTANCE: { ";
+
+        states = states + this.states + " }\n";
+
+        symbols = symbols + this.symbols + " }\n";
+
+        this.transitions.forEach(t -> {
+            transitions += t.toString();
+        });
+        transitions += " }\n";
+
+        aceptance = aceptance + this.aceptance + " }\n";
+
+        return states + symbols + transitions + aceptance;
+    }
 }

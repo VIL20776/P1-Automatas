@@ -12,10 +12,8 @@ public class Subsets {
     {
         Set<Integer> lock = new HashSet<>();
         lock.add(s);
-
         transitions.forEach(t -> {
             if (t.origin == s && t.symbol == '$') {
-                lock.add(t.destiny);
                 lock.addAll(sLock(transitions, t.destiny));
             }
         });
@@ -58,15 +56,18 @@ public class Subsets {
             for (Character c : symbols) {
                 Set<Integer> destSet = new HashSet<>();
 
+                // Cerradura de todos los estados alcanzables por los estados de destino
                 for (Integer s : destinySet(originSet, c, transitions)) {
                     destSet.addAll(sLock(autom.getTransitions(), s));
                 }
 
-                if (destSet == new HashMap<>())
+                //Agrega el estado vacio si la cerradura es vacia y no ha sido agregado aún
+                if (destSet.isEmpty() && !subsets.containsValue(-1))
                 {
-                    subsets.putIfAbsent(destSet, -1);
+                    subsets.putIfAbsent(destSet, -1); 
                 }
 
+                //Agrega un nuevo estado si no lo ha encontrado
                 if (!subsets.containsKey(destSet)) {
                     count++;
                     subsets.put(destSet, count);
@@ -76,9 +77,11 @@ public class Subsets {
                     }
                 }
 
+                //Agrega la transicion
                 result.addTransition(new Trans(subsets.get(originSet), subsets.get(destSet), c));
             }
 
+            //Si se agrego un estado vacio, agregar transiciones hacia si mismo por cada simbolo
             if (subsets.containsValue(-1)) {
                 symbols.forEach(c -> result.addTransition(new Trans(-1, -1, c)));
             }
