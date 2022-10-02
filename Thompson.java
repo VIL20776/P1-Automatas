@@ -20,6 +20,7 @@ public class Thompson {
 
         result.addTransition(new Trans(m.size(), 1, '$'));
         result.addTransition(new Trans(0, m.size() + 1, '$'));
+        result.addTransition(new Trans(m.size(), m.size() + 1, '$'));
 
         result.setAceptance(m.size() + 1);
         return result;
@@ -42,7 +43,7 @@ public class Thompson {
             result.addTransition(new Trans(t.origin + m.size(), t.destiny + m.size(), t.symbol));
         });
 
-        result.setAceptance(m.getAceptance() + n.getAceptance() - 1);
+        result.setAceptance(m.size() + n.size() - 1);
         return result;
     }
 

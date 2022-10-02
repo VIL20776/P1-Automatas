@@ -27,4 +27,25 @@ public class DFA extends Autom {
     {
         finals.add(a);
     }
+
+    @Override
+    public String toString() {
+        String states = "ESTADOS: ";
+        String symbols = "SIMBOLOS: ";
+        String transitions = "TRANSICIONES: ";
+        String aceptance = "ACEPTANCION: ";
+
+        states = states + this.states + "\n";
+
+        symbols = symbols + this.symbols + "\n";
+
+        // for(Trans t: this.transitions){
+        //     transitions = transitions + t.toString();
+        // }
+        transitions = transitions + this.transitions + "\n";
+
+        aceptance = aceptance + this.finals + "\n";
+
+        return states + symbols + transitions + aceptance;
+    }
 }

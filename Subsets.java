@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class Subsets {
 
-    private static Set<Integer> sLock (List<Trans> transitions, int s)
+    private static Set<Integer> sLock (final List<Trans> transitions, int s)
     {
         Set<Integer> lock = new HashSet<>();
         lock.add(s);
@@ -21,7 +21,7 @@ public class Subsets {
         return lock;
     }
 
-    private static Set<Integer> destinySet (Set<Integer> origin, char symbol, List<Trans> trans)
+    private static Set<Integer> destinySet (final Set<Integer> origin, char symbol, final List<Trans> trans)
     {
         Set<Integer> destiny = new HashSet<>();
         origin.forEach(s -> {
@@ -34,15 +34,17 @@ public class Subsets {
         return destiny;
     }
 
-    static Autom subsets (Autom autom)
+    static DFA subsets (Autom autom)
     {
         DFA result = new DFA();
 
         Set<Character> symbols = autom.getSymbols();
+        symbols.remove('$');
+
         List<Trans> transitions = autom.getTransitions();
         int aceptance = autom.getAceptance();
 
-        Set<Integer> initSet = new HashSet<>( sLock(autom.getTransitions(), 0) );
+        Set<Integer> initSet = new HashSet<>( sLock(transitions, 0) );
 
         Map<Set<Integer>, Integer> subsets = new HashMap<>();
         subsets.put(initSet, 0);
@@ -80,14 +82,14 @@ public class Subsets {
                 //Agrega la transicion
                 result.addTransition(new Trans(subsets.get(originSet), subsets.get(destSet), c));
             }
-
-            //Si se agrego un estado vacio, agregar transiciones hacia si mismo por cada simbolo
-            if (subsets.containsValue(-1)) {
-                symbols.forEach(c -> result.addTransition(new Trans(-1, -1, c)));
-            }
-
-            result.setStateSize(count + 1);
         }
+
+        //Si se agrego un estado vacio, agregar transiciones hacia si mismo por cada simbolo
+        if (subsets.containsValue(-1)) {
+            symbols.forEach(c -> result.addTransition(new Trans(-1, -1, c)));
+        }
+
+        result.setStateSize(count + 1);
 
         return result;
     }

@@ -2,6 +2,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +18,7 @@ public class Minimize {
         int i = 1;
         for (int y = 0; y < states; y++) {
             for (int x = i; x < states; x++) {
-                if (finals.contains(x)) {
+                if (!finals.contains(y) && finals.contains(x)) {
                     matrix[y][x] = true;
                 } else {
                     matrix[y][x] = false;
@@ -83,16 +84,18 @@ public class Minimize {
         Deque<Integer []> initialPairs = statePairs(matrix);
         Deque<Integer []> newPairs = new ArrayDeque<>();
 
-        do { // Busca pares de estados de destino
+        while (!initialPairs.isEmpty()) { 
+            // Busca pares de estados de destino
             Integer [] refPair = initialPairs.pop();
             for (char c : symbols) {
                 for (Trans t0 : trans) {
                     if (refPair[0] == t0.destiny && c == t0.symbol) {
                         for (Trans t1 : trans) {
-                            if (refPair[1] == t1.destiny && c == t1.symbol) {
+                            if (refPair[1] == t1.destiny && c == t1.symbol
+                                && t1.destiny > t0.destiny) {  
                                 //Agrega el par de estados de origen correspondiente si no ha sido agregado
                                 Integer [] newPair = {t0.origin, t1.origin};
-                                if (!newPairs.contains(newPair)){
+                                if (!matrix[t0.origin][t1.origin]){
                                     matrix[t0.origin][t1.origin] = true; //Actualiza la matriz
                                     newPairs.push(newPair);
                                 }
@@ -104,9 +107,9 @@ public class Minimize {
             if (initialPairs.isEmpty()) {
                 if (!newPairs.isEmpty())
                     initialPairs.addAll(newPairs);
+                    newPairs.clear();
             }
-
-        } while (!initialPairs.isEmpty());
+        }
 
         //Mapea los estados a reemplazar
         Map<Integer,Integer> newStates = mapStates(matrix);
@@ -123,7 +126,7 @@ public class Minimize {
             t.destiny = newStates.getOrDefault(t.destiny, t.destiny);
         });
 
-        Set<Trans> resizeTrans = new HashSet<>(trans);
+        Set<Trans> resizeTrans = new LinkedHashSet<>(trans);
         trans.clear();
         trans.addAll(resizeTrans);
 

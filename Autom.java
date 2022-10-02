@@ -110,23 +110,21 @@ public class Autom {
 
     @Override
     public String toString() {
-        String info = "";
+        String states = "ESTADOS: ";
+        String symbols = "SIMBOLOS: ";
+        String transitions = "TRANSICIONES: ";
+        String aceptance = "ACEPTANCION: ";
 
-        String states = "ESTADOS: { ";
-        String symbols = "SIMBOLOS: { ";
-        String transitions = "TRANSICIONES: { ";
-        String aceptance = "ACEPTANCE: { ";
+        states = states + this.states + "\n";
 
-        states = states + this.states + " }\n";
+        symbols = symbols + this.symbols + "\n";
 
-        symbols = symbols + this.symbols + " }\n";
+        // for(Trans t: this.transitions){
+        //     transitions = transitions + t.toString();
+        // }
+        transitions = transitions + this.transitions + "\n";
 
-        this.transitions.forEach(t -> {
-            transitions += t.toString();
-        });
-        transitions += " }\n";
-
-        aceptance = aceptance + this.aceptance + " }\n";
+        aceptance = aceptance + this.aceptance + "\n";
 
         return states + symbols + transitions + aceptance;
     }

@@ -7,7 +7,7 @@ public class Writer {
             FileWriter write = new FileWriter(type);
             write.write(autom.toString());
             write.close();
-            System.out.println("Archivo " + type + "creado.");
+            System.out.println("Archivo " + type + " creado.");
         } catch (Exception e) {
             System.out.println("Error al crear el archivo.");
         }

@@ -17,13 +17,13 @@ public class Reader {
         switch (ch) {
         case '*':
             return 3;
-
-        case '.':
-            return 2;
  
         case '+':
         case '|':
             return 1;
+
+        case '.':
+            return 2;
 
         }
         return -1;
@@ -36,7 +36,7 @@ public class Reader {
     {
         // initializing empty String for result
         String result = new String("");
-        int conCounter = 0;
+        boolean concat = false;
  
         // initializing empty stack
         Deque<Character> stack
@@ -48,14 +48,8 @@ public class Reader {
             // If the scanned character is an
             // operand, add it to output.
             if (Character.isLetterOrDigit(c))
-            {
-                conCounter++;
-                char tc = '#';
-                if ((i + 1) < exp.length()) {
-                    tc = exp.charAt(i + 1);
-                }
-                
-                if (conCounter > 1 && tc != '*') {
+            {     
+                if (concat) {
                     while (!stack.isEmpty()
                         && Prec('.') <= Prec(stack.peek())) {
                         result += stack.peek();
@@ -64,15 +58,21 @@ public class Reader {
                     stack.push('.');
                 }
                 result += c;
+                concat = true;
             }
             // If the scanned character is an '(',
             // push it to the stack.
             else if (c == '(')
             {
-                if(conCounter > 0) 
+                if(concat) 
                 {
-                    conCounter = 0;
+                    while (!stack.isEmpty()
+                        && Prec('.') <= Prec(stack.peek())) {
+                        result += stack.peek();
+                        stack.pop();
+                    }
                     stack.push('.');
+                    concat = false;
                 }
                 stack.push(c);
                 continue;
@@ -87,7 +87,7 @@ public class Reader {
                     stack.pop();
                 }
                 stack.pop();
-                conCounter = 1;
+                concat = true;
             }
             else // an operator is encountered
             {
@@ -98,7 +98,8 @@ public class Reader {
                 }
                 stack.push(c);
 
-                if (c == '+') conCounter = 0;
+                if (c == '+')
+                    concat = false;
             }               
         }
  
